@@ -14,6 +14,10 @@ module Amex
       @loyalty_programmes = []
     end
 
+    def statement_balance
+      @stmt_balance
+    end
+
     def product
       @card_product
     end
