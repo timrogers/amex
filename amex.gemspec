@@ -10,5 +10,7 @@ Gem::Specification.new do |gem|
 
   gem.add_runtime_dependency "httparty"
 
-  gem.files = `git ls-files`.split("\n")
-end%
+  gem.files = ["lib/amex.rb", "lib/amex/card_account.rb", "lib/amex/client.rb",
+    "lib/amex/loyalty_programme.rb", "lib/amex/utils.rb", "lib/amex/version.rb",
+    "lib/amex/data/request.xml"]
+end

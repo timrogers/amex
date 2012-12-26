@@ -1,10 +1,4 @@
-begin
-  require "#{File.dirname(__FILE__)}/lib/amex.rb"
-rescue Exception => e
-  puts "Unable to load Amex gem from lib/amex directory"
-  puts "Message: #{e.message}"
-  puts "Backtrace: #{e.backtrace.inspect}"
-end
+require 'amex'
 
 # Bring in the settings.rb file - this isn't included in the repository,
 # but it should just contain two class variables, `username` and `password`
