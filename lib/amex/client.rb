@@ -23,7 +23,9 @@ module Amex
       ERB.new(xml).result(binding)
     end
 
-    def fetch
+    def account
+      # This only supports one account for now, because I'm lazy and I
+      # hate traversing XML...
       options = { :body => { "PayLoadText" => request_xml }}
       response = self.class.post(
         '/myca/intl/moblclient/emea/ws.do?Face=en_GB', options

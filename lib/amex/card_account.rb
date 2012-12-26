@@ -18,10 +18,12 @@ module Amex
 
     def is_credit_card?
       return true if @lending_type == "Credit"
+      false
     end
 
     def is_charge_card?
       return true if @lending_type == "Charge"
+      false
     end
 
   end
