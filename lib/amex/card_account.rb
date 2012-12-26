@@ -10,8 +10,8 @@ module Amex
 
     def initialize(options)
       options.each do |key, value|
-        method = key.underscore + "=", value
-        send(key.underscore + "=", value) if respond_to? method
+        method = key.underscore + "="
+        send(key.underscore + "=", value) if respond_to? method.to_sym
       end
       @loyalty_programmes = []
     end
