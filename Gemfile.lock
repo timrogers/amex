@@ -1,6 +1,7 @@
 GEM
   remote: http://rubygems.org/
   specs:
+    crack (0.3.1)
     httparty (0.9.0)
       multi_json (~> 1.0)
       multi_xml
@@ -11,4 +12,5 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  crack (= 0.3.1)
   httparty (= 0.9.0)

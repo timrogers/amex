@@ -14,10 +14,5 @@ module Amex
       end
       @loyalty_programmes = []
     end
-
-    def inspect
-      "#<#{class}: #{card_product}, #{card_member_name}>"
-    end
-
   end
 end
