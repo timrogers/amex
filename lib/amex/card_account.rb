@@ -19,7 +19,7 @@ module Amex
     end
 
     def cancelled?
-      @cancelled.to_bool
+      @cancelled
     end
 
     def payment_due_date
@@ -28,10 +28,10 @@ module Amex
     end
 
     def type
-      return :basic if @is_basic.to_bool
-      return :platinum if @is_platinum.to_bool
-      return :centurion if @is_centurion.to_bool
-      return :premium if @is_premium.to_bool
+      return :basic if @is_basic
+      return :platinum if @is_platinum
+      return :centurion if @is_centurion
+      return :premium if @is_premium
       :unknown
     end
 
@@ -46,7 +46,7 @@ module Amex
     end
 
     def overdue?
-      return true if @past_due.to_bool
+      return true if @past_due
       false
     end
 
@@ -56,7 +56,7 @@ module Amex
     end
 
     def loyalty_enabled?
-      @loyalty_indicator.to_bool
+      @loyalty_indicator
     end
 
     def loyalty_balances
