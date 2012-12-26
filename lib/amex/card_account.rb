@@ -1,6 +1,6 @@
 module Amex
   class CardAccount
-    attr_accessor :card_product, :card_index, :card_number_suffix,
+    attr_accessor :card_product, :card_number_suffix,
       :lending_type, :card_member_name, :past_due, :cancelled, :is_basic,
       :is_centurion, :is_platinum, :is_premium, :market, :card_art,
       :rewards_explore_url, :loyalty_indicator, :card_art_s3,
@@ -10,9 +10,19 @@ module Amex
 
     def initialize(options)
       options.each do |key, value|
-        send(key.underscore + "=", value)
+        method = key.underscore + "=", value
+        send(key.underscore + "=", value) if respond_to? method
       end
       @loyalty_programmes = []
     end
+
+    def is_credit_card?
+      return true if @lending_type == "Credit"
+    end
+
+    def is_charge_card?
+      return true if @lending_type == "Charge"
+    end
+
   end
 end
