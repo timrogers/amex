@@ -33,7 +33,7 @@ module Amex
         accounts = [] # We'll store all the accounts in here!
 
         xml.css('CardAccounts CardAccount').each do |item|
-          account_details = {} # All the attributes from the XML go in here
+          account_details = {client: self} # All the attributes from the XML go in here
           # For each of the CardAccount objects, let's first go through
           # the CardData to pull out lots of nice information
           item.css('CardData param').each do |attribute|
@@ -80,6 +80,19 @@ module Amex
 
     end
 
+    def statement_request_xml(card_index, billing_period=0)
+      # Generates XML for grabbing the last statement's transactions for a
+      # card, using the card_index attribute from an account's XML
+
+      xml = File.read(
+        File.expand_path(File.dirname(__FILE__) + '/data/statement_request.xml')
+      )
+
+      security_token = @security_token
+      ERB.new(xml).result(binding)
+    end
+
+
     private
 
     def request_xml
@@ -94,18 +107,6 @@ module Amex
       password = @password
       timestamp = Time.now.to_i
 
-      ERB.new(xml).result(binding)
-    end
-
-    def statement_request_xml(card_index)
-      # Generates XML for grabbing the last statement's transactions for a
-      # card, using the card_index attribute from an account's XML
-
-      xml = File.read(
-        File.expand_path(File.dirname(__FILE__) + '/data/statement_request.xml')
-      )
-
-      security_token = @security_token
       ERB.new(xml).result(binding)
     end
 
