@@ -4,7 +4,8 @@ module Amex
       :lending_type, :card_member_name, :past_due, :cancelled, :is_basic,
       :is_centurion, :is_platinum, :is_premium, :market, :card_art,
       :loyalty_indicator, :stmt_balance, :payment_credits, :recent_charges,
-      :total_balance, :payment_due, :payment_due_date, :loyalty_programmes
+      :total_balance, :payment_due, :payment_due_date, :loyalty_programmes,
+      :transactions
 
     def initialize(options)
       options.each do |key, value|
@@ -12,6 +13,7 @@ module Amex
         send(key.underscore + "=", value) if respond_to? method.to_sym
       end
       @loyalty_programmes = []
+      @transactions = []
     end
 
     def statement_balance

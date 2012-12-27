@@ -77,6 +77,19 @@ module Amex
               element.attr('label'), element.attr('formattedValue').gsub(",", "").to_i
             )
           end
+
+          # Now we can fetch the transactions...
+          options = { :body => { "PayLoadText" => statement_request_xml }}
+          response = self.class.post(
+            '/myca/intl/moblclient/emea/ws.do?Face=en_GB', options
+          )
+          xml = Nokogiri::XML(response.body)
+          xml = xml.css("XMLResponse")
+
+          xml.css('Transaction').each do |transaction|
+            account.transactions << Amex::Transaction.new(transaction)
+          end
+
           accounts << account
 
         end
