@@ -38,6 +38,9 @@ module Amex
       if xml.css('ServiceResponse Status').text != "success"
         raise "There was a problem logging in to American Express."
       else
+        # Store the security token - we need this for further requests
+        @security_token = xml.css('ClientSecurityToken').text
+
         accounts = [] # We'll store all the accounts in here!
 
         xml.css('CardAccounts CardAccount').each do |item|
