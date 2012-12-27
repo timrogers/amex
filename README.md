@@ -27,6 +27,9 @@ from the most recent statement
 __v0.3.2__ - Generates a fake HardwareId in the first request, since I'm
 paranoid about American Express blocking 'dummy_device_id'
 
+__v0.4.0__ - Improves transactions - adds support for lazy-loading and
+pagination from Amex::CardAccount#transactions
+
 
 ### Usage
 
@@ -92,7 +95,16 @@ kind of loyalty scheme active? (e.g. Membership Rewards)
 * __total_balance (float)__ - what American Express refer to as your total balance, whatever that is!
 * __payment_due (float)__ - the amount of money you need to pay before `payment_due_date`
 * __payment_due_date (DateTime)__ - when the `payment_due` needs to be paid by
-* __transactions (array)__ - an array of Amex::Transaction objects)
+
+The transactions for a given account can be found by calling the `transaction`
+method on a CardAccount. This takes a parameter, `billing_period`, which can
+be an integer referring to a particular statement, or a range of integers.
+
+To get transactions since the most recent statement, simply call
+`account.transactions(0)` or `account.transactions`, since this is the default.
+
+To get the last statement, call `account.transactions(1)`. To get from now up
+to 5 statements ago, call `account.transactions(0..5)`. You get the idea.
 
 There are lots of extra useful methods here to make accessing
 some of the various properties easier. They're very self-explanatory - check `lib/amex/card_account.rb`.
@@ -117,11 +129,6 @@ its formatted value in the value in the hash.
 There's one helper method currently available here, `is_foreign_transaction?`,
 which returns a boolean representing whether the transaction was foreign (i.e.
 in a non-native currency).
-
-### Limitations
-
-* You can only view transactions from the most recent statement. I intend
-to change this in due course to support pagination of some description.
 
 ### License
 

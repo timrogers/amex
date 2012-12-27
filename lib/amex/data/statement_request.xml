@@ -7,7 +7,7 @@
 <ServiceName>StatementService</ServiceName>
 <ClientSecurityToken><%= security_token %></ClientSecurityToken>
 <StatementRequestData>
-<BillingPeriod>0</BillingPeriod>
+<BillingPeriod><%= billing_period %></BillingPeriod>
 <CardIndex><%= card_index %></CardIndex>
 </StatementRequestData>
 </XMLRequest>
