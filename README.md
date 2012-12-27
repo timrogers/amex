@@ -8,8 +8,11 @@ However, this one doesn't rely on nasty screen-scraping. Instead, it uses
 the previous unknown internal API used by American Express for their
 "Amex UK" iPhone app. I suspect it works elsewhere, but I haven't tested.
 
-This is only built to work with one card on your account because I hate
-parsing XML. If you want to improve this, be my guest!
+### Changelog
+
+__v0.1.0__ - Original version
+__v0.2.0__ - Support for multiple American Express cards, parsing using
+Nokogiri
 
 ### Usage
 
@@ -38,9 +41,9 @@ username and password - this is used to perform the authentication required.
 only supports one card at a time right now.
 
 ```
-account = client.account
-puts account.product
-puts account.type
+accounts = client.accounts
+puts account.first.product
+puts account.first.type
 ```
 
 ### Data models
@@ -80,8 +83,7 @@ A __LloydsTSB::LoyaltyProgramme has just two attributes:
 
 ### Limitations
 
-* This only works when you have one American Express account, it doesn't support multiple ones. I don't know how it will behave in those circumstances.
-* I don't know how this will behave outside of the UK!
+* There's no support for viewing transactions yet - watch this space!
 
 ### License
 

@@ -1,3 +1,4 @@
+require 'rubygems'
 require 'amex'
 
 # Bring in the settings.rb file - this isn't included in the repository,
@@ -5,5 +6,5 @@ require 'amex'
 require "#{File.dirname(__FILE__)}/settings.rb"
 
 client = Amex::Client.new(@username, @password)
-account = client.fetch
-puts account.inspect
+accounts = client.accounts
+puts accounts.first.inspect

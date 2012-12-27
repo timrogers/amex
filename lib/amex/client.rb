@@ -24,7 +24,7 @@ module Amex
       ERB.new(xml).result(binding)
     end
 
-    def account
+    def accounts
       # This only supports one account for now, because I'm lazy and I
       # hate traversing XML...
       options = { :body => { "PayLoadText" => request_xml }}
