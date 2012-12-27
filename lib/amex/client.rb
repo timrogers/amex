@@ -1,5 +1,6 @@
 require 'erb'
 require 'httparty'
+require 'nokogiri'
 
 module Amex
   class Client
