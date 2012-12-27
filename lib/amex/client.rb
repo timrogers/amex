@@ -32,30 +32,43 @@ module Amex
         '/myca/intl/moblclient/emea/ws.do?Face=en_GB', options
       )
 
-      xml = MultiXml.parse(response)['XMLResponse']
+      xml = Nokogiri::XML(response.body)
+      xml = xml.css("XMLResponse")
 
-      if xml['ServiceResponse']['Status'] != "success"
+      if xml.css('ServiceResponse Status').text != "success"
         raise "There was a problem logging in to American Express."
       else
-        account_details = {}
-        xml["CardAccounts"]["CardAccount"]["CardData"]["param"].each do |item|
-          account_details[item['name']] = item['__content__']
-        end
+        accounts = [] # We'll store all the accounts in here!
 
-        xml["CardAccounts"]["CardAccount"]["AccountSummaryData"]["SummaryElement"].each do |item|
-          account_details[item['name']] = item['value'] ? item['value'].to_f : item['formattedValue']
-        end
-
-        account = Amex::CardAccount.new(account_details)
-
-        xml["CardAccounts"]["CardAccount"]["LoyaltyProgramData"].each do |item|
-          item.each do |part|
-            next if part.class == String
-            account.loyalty_programmes << Amex::LoyaltyProgramme.new(part['label'], part['formattedValue'].gsub(",", "").to_i)
+        xml.css('CardAccounts CardAccount').each do |item|
+          account_details = {} # All the attributes from the XML go in here
+          # For each of the CardAccount objects, let's first go through
+          # the CardData to pull out lots of nice information
+          item.css('CardData param').each do |attribute|
+            account_details[attribute.attr('name')] = attribute.text
           end
+
+          # Now let's go through the AccountSummaryData to find all the
+          # various bits of balance information
+          item.css('AccountSummaryData SummaryElement').each do |attribute|
+            account_details[attribute.attr('name')] = attribute.attr('value') ? attribute.attr('value').to_f : attribute.attr('formattedValue')
+          end
+
+          # We have all the attributes ready to go, so let's make an
+          # Amex::CardAccount object
+          account = Amex::CardAccount.new(account_details)
+
+          # Finally, let's rip out all the loyalty balances...
+          item.css('LoyaltyProgramData LoyaltyElement').each do |element|
+            account.loyalty_programmes << Amex::LoyaltyProgramme.new(
+              element.attr('label'), element.attr('formattedValue').gsub(",", "").to_i
+            )
+          end
+          accounts << account
+
         end
 
-        account
+        accounts
       end
 
     end
