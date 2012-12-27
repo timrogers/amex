@@ -25,7 +25,7 @@ module Amex
       ERB.new(xml).result(binding)
     end
 
-    def statement_request_xml
+    def statement_request_xml(card_index)
       xml = File.read(
         File.expand_path(File.dirname(__FILE__) + '/data/statement_request.xml')
       )
@@ -79,7 +79,9 @@ module Amex
           end
 
           # Now we can fetch the transactions...
-          options = { :body => { "PayLoadText" => statement_request_xml }}
+          options = { :body => {
+            "PayLoadText" => statement_request_xml(account.card_index)
+          }}
           response = self.class.post(
             '/myca/intl/moblclient/emea/ws.do?Face=en_GB', options
           )

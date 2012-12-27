@@ -1,6 +1,6 @@
 module Amex
   class CardAccount
-    attr_accessor :card_product, :card_number_suffix,
+    attr_accessor :card_product, :card_number_suffix, :card_index
       :lending_type, :card_member_name, :past_due, :cancelled, :is_basic,
       :is_centurion, :is_platinum, :is_premium, :market, :card_art,
       :loyalty_indicator, :stmt_balance, :payment_credits, :recent_charges,
