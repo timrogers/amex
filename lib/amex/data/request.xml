@@ -5,6 +5,6 @@
 <ServiceVersion>1.0</ServiceVersion>
 <Locale>en_GB</Locale>
 <ServiceName>AccountSummaryService</ServiceName>
-<DeviceInfo><HardwareId>dummy_hardware_id</HardwareId><OSBuild>iPhone OS 6.0.1</OSBuild><DeviceModel>iPhone</DeviceModel><Timestamp><%= timestamp %></Timestamp><TimeZoneOffset>0</TimeZoneOffset></DeviceInfo>
+<DeviceInfo><HardwareId><%= hardware_id %></HardwareId><OSBuild>iPhone OS 6.0.1</OSBuild><DeviceModel>iPhone</DeviceModel><Timestamp><%= timestamp %></Timestamp><TimeZoneOffset>0</TimeZoneOffset></DeviceInfo>
 <LoginCredentials><UserID><%= username %></UserID><Password><%= password %></Password><RememberMeUIFlagSelected>false</RememberMeUIFlagSelected><ProfileDataContent></ProfileDataContent></LoginCredentials>
 </XMLRequest>

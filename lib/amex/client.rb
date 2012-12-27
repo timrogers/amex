@@ -13,27 +13,6 @@ module Amex
       @password = password
     end
 
-    def request_xml
-      xml = File.read(
-        File.expand_path(File.dirname(__FILE__) + '/data/request.xml')
-      )
-
-      username = @username
-      password = @password
-      timestamp = Time.now.to_i
-
-      ERB.new(xml).result(binding)
-    end
-
-    def statement_request_xml(card_index)
-      xml = File.read(
-        File.expand_path(File.dirname(__FILE__) + '/data/statement_request.xml')
-      )
-
-      security_token = @security_token
-      ERB.new(xml).result(binding)
-    end
-
     def accounts
       # This only supports one account for now, because I'm lazy and I
       # hate traversing XML...
@@ -99,6 +78,45 @@ module Amex
         accounts
       end
 
+    end
+
+    private
+
+    def request_xml
+      # Generates XML for the first request for account information, taking
+      # an XML template and interpolating some parts with ERB
+
+      xml = File.read(
+        File.expand_path(File.dirname(__FILE__) + '/data/request.xml')
+      )
+
+      username = @username
+      password = @password
+      timestamp = Time.now.to_i
+
+      ERB.new(xml).result(binding)
+    end
+
+    def statement_request_xml(card_index)
+      # Generates XML for grabbing the last statement's transactions for a
+      # card, using the card_index attribute from an account's XML
+
+      xml = File.read(
+        File.expand_path(File.dirname(__FILE__) + '/data/statement_request.xml')
+      )
+
+      security_token = @security_token
+      ERB.new(xml).result(binding)
+    end
+
+    def hardware_id
+      # Generates a fake HardwareId - a 40 character alphanumeric lower-case
+      # string, which is passed in with the original API request
+
+      chars = 'abcdefghjkmnpqrstuvwxyz1234567890'
+      id = ''
+      40.times { id << chars[rand(chars.size)] }
+      id
     end
 
   end
