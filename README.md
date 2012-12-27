@@ -14,14 +14,19 @@ Express login, as well as the most recent statement's transactions.
 ### Changelog
 
 __v0.1.0__ - Original version
+
 __v0.2.0__ - Support for multiple American Express cards, parsing using
 Nokogiri
+
 __v0.3.0__ - Adds support for loading the transactions from the most recent statement
 (but it's broken because I forgot to change something from testing :( )
+
 __v0.3.1__ - Working version of v0.3.0 that will successfully load transactions
 from the most recent statement
+
 __v0.3.2__ - Generates a fake HardwareId in the first request, since I'm
 paranoid about American Express blocking 'dummy_device_id'
+
 
 ### Usage
 
@@ -31,7 +36,9 @@ The file `example.rb` provides a very simple example of how the code works, but 
 
 ```
 $ gem install amex
-`require 'amex'
+...
+require 'rubygems'
+require 'amex'
 ```
 
 2. You'll just need two variables, @username and @password, each unsurprisingly corresponding to different authentication details used
