@@ -1,6 +1,7 @@
 require 'erb'
 require 'httparty'
 require 'nokogiri'
+require 'date'
 
 module Amex
   class Client
@@ -21,6 +22,15 @@ module Amex
       password = @password
       timestamp = Time.now.to_i
 
+      ERB.new(xml).result(binding)
+    end
+
+    def statement_request_xml
+      xml = File.read(
+        File.expand_path(File.dirname(__FILE__) + '/data/statement_request.xml')
+      )
+
+      security_token = @security_token
       ERB.new(xml).result(binding)
     end
 
