@@ -6,7 +6,7 @@ module Amex
 
     def initialize(transaction)
       # Pass this a <Transaction> element, and it'll parse it
-      @date = Date.strptime(transaction.css('TransChargeDate').text, '%m/%d/%Y')
+      @date = Date.strptime(transaction.css('TransChargeDate').text, '%m/%d/%y')
       @narrative = transaction.css('TransDesc').text
       @amount = transaction.css('TransAmount').text.to_f
 
