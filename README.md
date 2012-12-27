@@ -8,11 +8,18 @@ However, this one doesn't rely on nasty screen-scraping. Instead, it uses
 the previous unknown internal API used by American Express for their
 "Amex UK" iPhone app. I suspect it works elsewhere, but I haven't tested.
 
+This allows you to fetch the details of all the cards on your American
+Express login, as well as the most recent statement's transactions.
+
 ### Changelog
 
 __v0.1.0__ - Original version
 __v0.2.0__ - Support for multiple American Express cards, parsing using
 Nokogiri
+__v0.3.0__ - Adds support for loading the transactions from the most recent statement
+(but it's broken because I forgot to change something from testing :( )
+__v0.3.1__ - Working version of v0.3.0 that will successfully load transactions
+from the most recent statement
 
 ### Usage
 
@@ -42,8 +49,10 @@ only supports one card at a time right now.
 
 ```
 accounts = client.accounts
-puts account.first.product
-puts account.first.type
+my_account = accounts.first
+puts my_account.product
+puts my_account.type
+puts my_account.transactions.inspect
 ```
 
 ### Data models
@@ -55,6 +64,8 @@ An __Amex::CardAccount__ instance has the following attributes:
 
 * __product (string)__ - the type of card (e.g. "The Preferred Rewards Gold Card®")
 * __card_number_suffix (string)__ - the last five digits of your card number
+* __card_index (integer)__ - the internal number of the card on your account
+in the Amex system, starting from 0 *(used internally by the gem)*
 * __lending_type (string)__ - either "Charge" or "Credit", depending on the type of credit arrangement you have
 * __card_member_name (string)__ - your name, as recorded as the account holder
 * __past_due (boolean)__ - is the card past its due payment date?
@@ -72,18 +83,36 @@ kind of loyalty scheme active? (e.g. Membership Rewards)
 * __total_balance (float)__ - what American Express refer to as your total balance, whatever that is!
 * __payment_due (float)__ - the amount of money you need to pay before `payment_due_date`
 * __payment_due_date (DateTime)__ - when the `payment_due` needs to be paid by
+* __transactions (array)__ - an array of Amex::Transaction objects)
 
 There are lots of extra useful methods here to make accessing
 some of the various properties easier. They're very self-explanatory - check `lib/amex/card_account.rb`.
 
-A __LloydsTSB::LoyaltyProgramme has just two attributes:
+A __Amex::LoyaltyProgramme has just two attributes:
 
 * __name (string)__ - The name of the programme, most often "Membership Rewards"
 * __balance (integer)__ - The balance of the programme
 
+An __Amex::Transaction represents a transaction in your most recent American
+Express statement. It has four attributes:
+
+* __amount (float)__ - The amount of the transaction
+* __date (Date)__ - The date that the transaction was recorded
+* __narrative (string)__ - The description shown on your statement, usually
+contaning the name of the merchant and their location
+* __extra_details (hash)__ - This hash contains any extra pieces of information
+provided by American Express...for instance, foreign transactions have their
+exchange rate and commission. The name of the attribute will be the key, and
+its formatted value in the value in the hash.
+
+There's one helper method currently available here, `is_foreign_transaction?`,
+which returns a boolean representing whether the transaction was foreign (i.e.
+in a non-native currency).
+
 ### Limitations
 
-* There's no support for viewing transactions yet - watch this space!
+* You can only view transactions from the most recent statement. I intend
+to change this in due course to support pagination of some description.
 
 ### License
 
