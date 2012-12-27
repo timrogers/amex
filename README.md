@@ -1,4 +1,4 @@
-## Amex
+## Amex *[(view on RubyGems.org)](http://rubygems.org/gems/amex)*
 
 Welcome to the last continuation of my Ruby-based assault on various online
 banking systems, much like my
