@@ -8,14 +8,23 @@ module Amex
     include HTTParty
     base_uri 'https://global.americanexpress.com/'
 
+    # Generates an Amex::Client object from a username and password
+    #
+    # @param [String] username Your American Express online services username
+    # @param [String] password Your American Express online services password
+    # @return [Amex::Client] an object representing an American Express online
+    #  account
+    #
     def initialize(username, password)
       @username = username
       @password = password
     end
 
+    # Fetches the cards on an American Express online services account
+    #
+    # @return [Array<Amex::CardAccount>] an array of `Amex::CardAccount` objects
+    #
     def accounts
-      # This only supports one account for now, because I'm lazy and I
-      # hate traversing XML...
       options = { :body => { "PayLoadText" => request_xml }}
       response = self.class.post(
         '/myca/intl/moblclient/emea/ws.do?Face=en_GB', options
@@ -80,10 +89,17 @@ module Amex
 
     end
 
+    # Generates the XML to send in a request to fetch transactions for a card
+    #
+    # @param [Integer] card_index The index of the card you're looking up
+    #  in your account (see Amex::CardAccount#card_index)
+    # @param [Integer] billing_period The billing period to look at, with "0"
+    #  being transactions since your last statement, "1" being your last
+    #  statement, "2" the statement before that and so on....
+    #
+    # @return [String] XML to be sent in the request
+    #
     def statement_request_xml(card_index, billing_period=0)
-      # Generates XML for grabbing the last statement's transactions for a
-      # card, using the card_index attribute from an account's XML
-
       xml = File.read(
         File.expand_path(File.dirname(__FILE__) + '/data/statement_request.xml')
       )
@@ -95,10 +111,11 @@ module Amex
 
     private
 
+    # Generates the XML to send in a request to fetch cards for an account
+    #
+    # @return [String] XML to be sent in the request
+    #
     def request_xml
-      # Generates XML for the first request for account information, taking
-      # an XML template and interpolating some parts with ERB
-
       xml = File.read(
         File.expand_path(File.dirname(__FILE__) + '/data/request.xml')
       )
@@ -110,10 +127,13 @@ module Amex
       ERB.new(xml).result(binding)
     end
 
+    # Generates a fake HardwareId to be sent in requests, in an attempt to
+    # hide what requests to the API are coming from this gem
+    #
+    # @return [String] a 40 character alphanumeric lower-case string, which
+    #  is passed in with the original API request
+    #
     def hardware_id
-      # Generates a fake HardwareId - a 40 character alphanumeric lower-case
-      # string, which is passed in with the original API request
-
       chars = 'abcdefghjkmnpqrstuvwxyz1234567890'
       id = ''
       40.times { id << chars[rand(chars.size)] }
