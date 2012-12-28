@@ -130,6 +130,12 @@ There's one helper method currently available here, `is_foreign_transaction?`,
 which returns a boolean representing whether the transaction was foreign (i.e.
 in a non-native currency).
 
+### Examples
+
+* __[amex_alerts](https://github.com/timrogers/amex-alerts)__, a script
+designed to be run as a cron which tracks and alerts you on your rewards
+balances
+
 ### License
 
 Use this for what you will, as long as it isn't evil. If you make any changes or cool improvements, please let me know at <tim+amex@tim-rogers.co.uk>.
