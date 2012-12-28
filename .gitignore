@@ -1,2 +1,4 @@
 settings.rb
 doc/
+.yardoc
+.gem
