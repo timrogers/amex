@@ -1,4 +1,11 @@
 class String
+
+  # Converts a String object into a simple as used on an Amex::CardAccount
+  # object - the XML uses camelCase attributes, we want underscored ones
+  # which we can convert to symbol (e.g. cardProduct to card_product)
+  #
+  # @return [String] the reformatted string
+  #
   def underscore
     self.gsub(/::/, '/').
     gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').
@@ -6,11 +13,4 @@ class String
     tr("-", "_").
     downcase
   end
-
-  def to_bool
-    return true if self == true || self =~ (/(true|t|yes|y|1)$/i)
-    return false if self == false || self.blank? || self =~ (/(false|f|no|n|0)$/i)
-    raise ArgumentError.new("invalid value for Boolean: \"#{self}\"")
-  end
-
 end
