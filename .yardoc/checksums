@@ -1,0 +1,7 @@
+lib/amex.rb 3b551fbb55122c3a1057b9c11825d1309b4926ca
+lib/amex/utils.rb 5b68623dc063856684a994f328d9903c559d0428
+lib/amex/client.rb 0883ff3a046d9771a8e2a63ad1c00e99437e07a2
+lib/amex/version.rb 93b7907e12ae2a0052c70b3d9887b60f32a23dfe
+lib/amex/transaction.rb c2556801b5ed2a2f707744d447a72360297b8a62
+lib/amex/card_account.rb a54c4fbbbfec140f6751a5e39281e43255420c2a
+lib/amex/loyalty_programme.rb 3b6e3860bed39a0b73b8cabff5005c744fdd39b3

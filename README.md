@@ -30,6 +30,8 @@ paranoid about American Express blocking 'dummy_device_id'
 __v0.4.0__ - Improves transactions - adds support for lazy-loading and
 pagination from Amex::CardAccount#transactions
 
+__v0.4.1__ - Adds YARD documentation
+
 
 ### Usage
 
