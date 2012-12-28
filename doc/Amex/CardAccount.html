@@ -724,11 +724,8 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Returns whether this account has a due payment (i.e. whether you need</p>
-
-<pre class="code ruby"><code>to pay American Express anything)</code></pre>
-
-<p>(see #overdue?).</p>
+<p>Returns whether this account has a due payment (i.e. whether you need to
+pay American Express anything) (see #overdue?).</p>
 </div></span>
   
 </li>
@@ -2065,11 +2062,8 @@
 </p><div class="docstring">
   <div class="discussion">
     
-<p>Returns whether this account has a due payment (i.e. whether you need</p>
-
-<pre class="code ruby"><code>to pay American Express anything)</code></pre>
-
-<p>(see #overdue?)</p>
+<p>Returns whether this account has a due payment (i.e. whether you need to
+pay American Express anything) (see #overdue?)</p>
 
 
   </div>
@@ -2101,13 +2095,13 @@
       <pre class="lines">
 
 
+150
 151
 152
-153
-154</pre>
+153</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/amex/card_account.rb', line 151</span>
+      <pre class="code"><span class="info file"># File 'lib/amex/card_account.rb', line 150</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_due?'>due?</span>
   <span class='kw'>return</span> <span class='kw'>true</span> <span class='kw'>if</span> <span class='ivar'>@payment_due</span><span class='period'>.</span><span class='id identifier rubyid_to_f'>to_f</span> <span class='op'>&gt;</span> <span class='int'>0</span>
@@ -2279,16 +2273,16 @@ loyalty scheme, and the value its balance</p>
       <pre class="lines">
 
 
+171
 172
 173
 174
 175
 176
-177
-178</pre>
+177</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/amex/card_account.rb', line 172</span>
+      <pre class="code"><span class="info file"># File 'lib/amex/card_account.rb', line 171</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_loyalty_balances'>loyalty_balances</span>
   <span class='id identifier rubyid_result'>result</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
@@ -2344,12 +2338,12 @@ loyalty scheme, and the value its balance</p>
       <pre class="lines">
 
 
+160
 161
-162
-163</pre>
+162</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/amex/card_account.rb', line 161</span>
+      <pre class="code"><span class="info file"># File 'lib/amex/card_account.rb', line 160</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_loyalty_enabled?'>loyalty_enabled?</span>
   <span class='ivar'>@loyalty_indicator</span>
@@ -2758,7 +2752,7 @@ period (e.g. 0 or 1) or a range of periods to fetch (e.g. 0..3)</p>
 </div>
     
     <div id="footer">
-  Generated on Fri Dec 28 13:11:06 2012 by 
+  Generated on Fri Dec 28 13:31:04 2012 by 
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.7.5 (ruby-1.9.3).
 </div>

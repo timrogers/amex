@@ -143,8 +143,7 @@ module Amex
     end
 
     # Returns whether this account has a due payment (i.e. whether you need
-    #  to pay American Express anything)
-    # (see #overdue?)
+    # to pay American Express anything) (see #overdue?)
     #
     # @return [Boolean] true if the account has a due payment, false otherwise
     #
