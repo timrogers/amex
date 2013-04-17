@@ -6,18 +6,33 @@ require 'date'
 module Amex
   class Client
     include HTTParty
-    base_uri 'https://global.americanexpress.com/'
 
     # Generates an Amex::Client object from a username and password
     #
     # @param [String] username Your American Express online services username
     # @param [String] password Your American Express online services password
+    # @param [String] locale, either 'en_GB' or 'en_US'
     # @return [Amex::Client] an object representing an American Express online
     #  account
     #
-    def initialize(username, password)
+    def initialize(username, password, locale)
       @username = username
       @password = password
+      @locale = locale
+
+      all_urls = {
+        'en_GB' => {
+          :base_uri => 'https://global.americanexpress.com/',
+          :accounts => '/myca/intl/moblclient/emea/ws.do?Face='+@locale,
+        },
+        'en_US' => {
+          :base_uri => 'https://online.americanexpress.com/',
+          :accounts => '/myca/moblclient/us/ws.do?Face='+@locale,
+        }
+      }
+
+      @urls = all_urls[@locale]
+      self.class.base_uri @urls[:base_uri]
     end
 
     # Fetches the cards on an American Express online services account
@@ -27,11 +42,12 @@ module Amex
     def accounts
       options = { :body => { "PayLoadText" => request_xml }}
       response = self.class.post(
-        '/myca/intl/moblclient/emea/ws.do?Face=en_GB', options
+        @urls[:accounts], options
       )
 
       xml = Nokogiri::XML(response.body)
       xml = xml.css("XMLResponse")
+      puts xml
 
       if xml.css('ServiceResponse Status').text != "success"
         raise "There was a problem logging in to American Express."
@@ -71,7 +87,7 @@ module Amex
             "PayLoadText" => statement_request_xml(account.card_index)
           }}
           response = self.class.post(
-            '/myca/intl/moblclient/emea/ws.do?Face=en_GB', options
+            @urls[:accounts], options
           )
           xml = Nokogiri::XML(response.body)
           xml = xml.css("XMLResponse")
