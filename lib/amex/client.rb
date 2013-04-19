@@ -47,7 +47,6 @@ module Amex
 
       xml = Nokogiri::XML(response.body)
       xml = xml.css("XMLResponse")
-      puts xml
 
       if xml.css('ServiceResponse Status').text != "success"
         raise "There was a problem logging in to American Express."
@@ -67,8 +66,8 @@ module Amex
 
           # Now let's go through the AccountSummaryData to find all the
           # various bits of balance information
-          item.css('AccountSummaryData SummaryElement').each do |attribute|
-            account_details[attribute.attr('name')] = attribute.attr('value') ? attribute.attr('value').to_f : attribute.attr('formattedValue')
+          item.css('AccountSummaryData param').each do |attribute|
+            account_details[attribute.attr('name')] = attribute.text
           end
 
           # We have all the attributes ready to go, so let's make an
@@ -76,7 +75,7 @@ module Amex
           account = Amex::CardAccount.new(account_details)
 
           # Finally, let's rip out all the loyalty balances...
-          item.css('LoyaltyProgramData LoyaltyElement').each do |element|
+          item.css('LoyaltyData RewardsData param').each do |element|
             account.loyalty_programmes << Amex::LoyaltyProgramme.new(
               element.attr('label'), element.attr('formattedValue').gsub(",", "").to_i
             )

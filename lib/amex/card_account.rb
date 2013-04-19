@@ -5,7 +5,7 @@ module Amex
       :is_centurion, :is_platinum, :is_premium, :market, :card_art,
       :loyalty_indicator, :stmt_balance, :payment_credits, :recent_charges,
       :total_balance, :payment_due, :payment_due_date, :loyalty_programmes,
-      :client
+      :client, :out_standing_balance
 
     # Generates a CardAccount object from XML properties grabbed by the client
     #
@@ -17,6 +17,7 @@ module Amex
     def initialize(options)
       options.each do |key, value|
         method = key.to_s.underscore + "="
+        puts "#{method} = #{value}\n"
         send(key.to_s.underscore + "=", value) if respond_to? method.to_sym
       end
       @loyalty_programmes = []
@@ -98,7 +99,8 @@ module Amex
     #  is due
     def payment_due_date
       # Overrides attr_accessor so it actually returns a DateTime, not String
-      DateTime.parse(@payment_due_date)
+      DateTime.strptime(@payment_due_date, '%m/%d/%y')
+      #DateTime.parse(@payment_due_date)
     end
 
     # Returns the type of account this card conforms to (generally not useful,

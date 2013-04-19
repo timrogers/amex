@@ -14,9 +14,25 @@ module Amex
     #
     def initialize(transaction)
       # Pass this a <Transaction> element, and it'll parse it
-      @date = Date.strptime(transaction.css('TransChargeDate').text, '%m/%d/%y')
+      transChargeDate = transaction.css('TransChargeDate').text
+      chargeDate = transaction.css('[name=chargeDate]').text
+      if (!transChargeDate.empty?) then
+        puts "using transChargeDate: #{transChargeDate}"
+        @date = Date.strptime(transChargeDate, '%m/%d/%y')
+      else 
+        @date = Date.strptime(chargeDate, '%m/%d/%y')
+      end
+
       @narrative = transaction.css('TransDesc').text
-      @amount = transaction.css('TransAmount').text.to_f
+
+      transAmount = transaction.css('TransAmount').text
+      transactionAmt = transaction.css('[name=transactionAmt]').text
+
+      if (!transAmount.empty?) then
+        @amount = transAmount.to_f
+      else
+        @amount = transactionAmt.to_f
+      end
 
       @extra_details = {}
       transaction.css('TransExtDetail ExtDetailElement').each do |element|
