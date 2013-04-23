@@ -17,7 +17,6 @@ module Amex
     def initialize(options)
       options.each do |key, value|
         method = key.to_s.underscore + "="
-        puts "#{method} = #{value}\n"
         send(key.to_s.underscore + "=", value) if respond_to? method.to_sym
       end
       @loyalty_programmes = []
@@ -99,8 +98,11 @@ module Amex
     #  is due
     def payment_due_date
       # Overrides attr_accessor so it actually returns a DateTime, not String
-      DateTime.strptime(@payment_due_date, '%m/%d/%y')
-      #DateTime.parse(@payment_due_date)
+      if (@payment_due_date.empty? || @payment_due_date == '')
+        ''
+      else
+        DateTime.strptime(@payment_due_date  , '%m/%d/%y')
+      end
     end
 
     # Returns the type of account this card conforms to (generally not useful,
