@@ -2,7 +2,7 @@ require 'nokogiri'
 
 module Amex
   class Transaction
-    attr_reader :date, :narrative, :amount, :extra_details
+    attr_reader :date, :narrative, :amount, :extra_details, :description, :reference_number
 
     # Generates an Amex::LoyaltyProgramme object from a Nokogiri object
     # representing <Transaction> element
@@ -24,9 +24,11 @@ module Amex
       end
 
       @narrative = transaction.css('TransDesc').text
+      @description = transaction.css('[name=transDesc]').text.strip
+      @reference_number = transaction.css('[name=transRefNo]').text
 
       transAmount = transaction.css('TransAmount').text
-      transactionAmt = transaction.css('[name=transactionAmt]').text
+      transactionAmt = transaction.css('[name=transcationAmt]').text
 
       if (!transAmount.empty?) then
         @amount = transAmount.to_f

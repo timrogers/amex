@@ -53,8 +53,10 @@ module Amex
         options = { :body => {
           "PayLoadText" => @client.statement_request_xml(@card_index, n)
         }}
+
         response = @client.class.post(
-          '/myca/intl/moblclient/emea/ws.do?Face=en_GB', options
+          '/myca/moblclient/us/ws.do?Face=en_US', options
+          #'/myca/intl/moblclient/emea/ws.do?Face=en_GB', options
         )
         xml = Nokogiri::XML(response.body)
         xml = xml.css("XMLResponse")

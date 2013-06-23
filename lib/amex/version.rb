@@ -1,3 +1,3 @@
 module Amex
-  VERSION = '0.4.2pixel'
+  VERSION = '0.4.3pixel'
 end
