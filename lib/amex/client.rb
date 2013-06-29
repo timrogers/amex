@@ -83,7 +83,7 @@ module Amex
 
           # Now we can fetch the transactions...
           options = { :body => {
-            "PayLoadText" => statement_request_xml(account.card_index)
+            "PayLoadText" => transactions_request_xml(account.card_index, 0, :recent)
           }}
           response = self.class.post(
             @urls[:accounts], options
@@ -111,17 +111,22 @@ module Amex
     # @param [Integer] billing_period The billing period to look at, with "0"
     #  being transactions since your last statement, "1" being your last
     #  statement, "2" the statement before that and so on....
+    # @param [enum] transaction_type either :pending or :recent (pending or recent transactions)
+    #
     #
     # @return [String] XML to be sent in the request
     #
-    def statement_request_xml(card_index, billing_period=0)
+    def transactions_request_xml(card_index, billing_period=0, transaction_type=:recent)
+        xml_filename = (transaction_type == :pending) ? '/data/pending_transactions_request.xml' : '/data/statement_request.xml'
+        puts transaction_type
       xml = File.read(
-        File.expand_path(File.dirname(__FILE__) + '/data/statement_request.xml')
+        File.expand_path(File.dirname(__FILE__) + xml_filename)
       )
-
+      locale = @locale
       security_token = @security_token
       ERB.new(xml).result(binding)
     end
+
 
 
     private
@@ -138,6 +143,7 @@ module Amex
       username = @username
       password = @password
       timestamp = Time.now.to_i
+      locale = @locale
 
       ERB.new(xml).result(binding)
     end

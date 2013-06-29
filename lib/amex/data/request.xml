@@ -3,7 +3,7 @@
 <ClientType>iPhone</ClientType>
 <ClientVersion>1.8</ClientVersion>
 <ServiceVersion>1.0</ServiceVersion>
-<Locale>en_GB</Locale>
+<Locale><%= locale %></Locale>
 <ServiceName>AccountSummaryService</ServiceName>
 <DeviceInfo><HardwareId><%= hardware_id %></HardwareId><OSBuild>iPhone OS 6.0.1</OSBuild><DeviceModel>iPhone</DeviceModel><Timestamp><%= timestamp %></Timestamp><TimeZoneOffset>0</TimeZoneOffset></DeviceInfo>
 <LoginCredentials><UserID><%= username %></UserID><Password><%= password %></Password><RememberMeUIFlagSelected>false</RememberMeUIFlagSelected><ProfileDataContent></ProfileDataContent></LoginCredentials>

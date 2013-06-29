@@ -27,6 +27,7 @@ module Amex
     # @param [Fixnum, Range] billing_period The billing period(s) to fetch
     #  transactions for, as either a single billing period (e.g. 0 or 1) or
     #  a range of periods to fetch (e.g. 0..3)
+    # @param [enum] transaction_type either :pending or :recent
     # @return [Array<Amex::Transaction>] an array of `Amex::Transaction` objects
     # @note This can fetch either a single billing period or a range
     #  of billing periods, e.g:
@@ -35,7 +36,7 @@ module Amex
     #  => account.transaction(0..5)
     #  fetches transactions between now and five statements ago
     #
-    def transactions(billing_period=0)
+    def transactions(billing_period=0, transaction_type=:pending)
       result = []
 
       # Build an array of billing periods we need to fetch - this is almost
@@ -51,7 +52,7 @@ module Amex
 
       billing_periods.each do |n|
         options = { :body => {
-          "PayLoadText" => @client.statement_request_xml(@card_index, n)
+          "PayLoadText" => @client.transactions_request_xml(@card_index, n, transaction_type)
         }}
 
         response = @client.class.post(

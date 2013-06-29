@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <XMLRequest>
 <ClientType>iPhone</ClientType>
-<ClientVersion>1.8</ClientVersion>
-<ServiceVersion>1.0</ServiceVersion>
+<ClientVersion>4.1</ClientVersion>
+<ServiceVersion>2.1</ServiceVersion>
 <Locale><%= locale %></Locale>
-<ServiceName>StatementService</ServiceName>
+<ServiceName>FinancialService</ServiceName>
+<Operation>Statement</Operation>
 <ClientSecurityToken><%= security_token %></ClientSecurityToken>
 <StatementRequestData>
 <BillingPeriod><%= billing_period %></BillingPeriod>
 <CardIndex><%= card_index %></CardIndex>
+<StartRecord>0</StartRecord>
+<RecordsPerPage>9999</RecordsPerPage>
 </StatementRequestData>
 </XMLRequest>
