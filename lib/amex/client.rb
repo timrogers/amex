@@ -2,7 +2,7 @@ require 'erb'
 require 'httparty'
 require 'nokogiri'
 require 'date'
-require 'SecureRandom'
+require 'uuid'
 
 module Amex
   class Client
@@ -36,6 +36,8 @@ module Amex
 
       @urls = all_urls[@locale]
       self.class.base_uri @urls[:base_uri]
+
+      @uuid_generator = UUID.new
     end
 
     # Fetches the cards on an American Express online services account
@@ -87,7 +89,7 @@ module Amex
 
         end
         accounts
-        
+
       end
 
     end
@@ -141,12 +143,12 @@ module Amex
     # @return [String] a uuid
     #
     def hardware_id
-      SecureRandom.uuid
+      @uuid_generator.generate
     end
 
 
     def advertisement_id
-      SecureRandom.uuid
+      @uuid_generator.generate
     end
 
   end
