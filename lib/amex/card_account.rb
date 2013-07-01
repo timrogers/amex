@@ -56,8 +56,7 @@ module Amex
         }}
 
         response = @client.class.post(
-          '/myca/moblclient/us/ws.do?Face=en_US', options
-          #'/myca/intl/moblclient/emea/ws.do?Face=en_GB', options
+          @client.urls[:accounts], options
         )
         xml = Nokogiri::XML(response.body)
         xml = xml.css("XMLResponse")
@@ -182,8 +181,5 @@ module Amex
       end
       result
     end
-
-
-
   end
 end

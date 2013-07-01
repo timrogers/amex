@@ -2,9 +2,12 @@ require 'erb'
 require 'httparty'
 require 'nokogiri'
 require 'date'
+require 'SecureRandom'
 
 module Amex
   class Client
+    attr_accessor :locale, :urls
+
     include HTTParty
 
     # Generates an Amex::Client object from a username and password
@@ -27,7 +30,7 @@ module Amex
         },
         'en_US' => {
           :base_uri => 'https://online.americanexpress.com/',
-          :accounts => '/myca/moblclient/us/ws.do?Face='+@locale,
+          :accounts => '/myca/moblclient/us/v2/ws.do',
         }
       }
 
@@ -80,26 +83,11 @@ module Amex
               element.attr('label'), element.attr('formattedValue').gsub(",", "").to_i
             )
           end
-
-          # Now we can fetch the transactions...
-          options = { :body => {
-            "PayLoadText" => transactions_request_xml(account.card_index, 0, :recent)
-          }}
-          response = self.class.post(
-            @urls[:accounts], options
-          )
-          xml = Nokogiri::XML(response.body)
-          xml = xml.css("XMLResponse")
-
-          xml.css('Transaction').each do |transaction|
-            account.transactions << Amex::Transaction.new(transaction)
-          end
-
           accounts << account
 
         end
-
         accounts
+        
       end
 
     end
@@ -117,8 +105,7 @@ module Amex
     # @return [String] XML to be sent in the request
     #
     def transactions_request_xml(card_index, billing_period=0, transaction_type=:recent)
-        xml_filename = (transaction_type == :pending) ? '/data/pending_transactions_request.xml' : '/data/statement_request.xml'
-        puts transaction_type
+      xml_filename = (transaction_type == :pending) ? '/data/pending_transactions_request.xml' : '/data/statement_request.xml'
       xml = File.read(
         File.expand_path(File.dirname(__FILE__) + xml_filename)
       )
@@ -148,17 +135,18 @@ module Amex
       ERB.new(xml).result(binding)
     end
 
-    # Generates a fake HardwareId to be sent in requests, in an attempt to
+    # Generates a HardwareId to be sent in requests, in an attempt to
     # hide what requests to the API are coming from this gem
     #
-    # @return [String] a 40 character alphanumeric lower-case string, which
-    #  is passed in with the original API request
+    # @return [String] a uuid
     #
     def hardware_id
-      chars = 'abcdefghjkmnpqrstuvwxyz1234567890'
-      id = ''
-      40.times { id << chars[rand(chars.size)] }
-      id
+      SecureRandom.uuid
+    end
+
+
+    def advertisement_id
+      SecureRandom.uuid
     end
 
   end

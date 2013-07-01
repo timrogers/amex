@@ -8,7 +8,7 @@
 <Operation>Statement</Operation>
 <ClientSecurityToken><%= security_token %></ClientSecurityToken>
 <StatementRequestData>
-<BillingPeriod><%= billing_period %></BillingPeriod>
+<BillingPeriod>99</BillingPeriod>
 <CardIndex><%= card_index %></CardIndex>
 <StartRecord>0</StartRecord>
 <RecordsPerPage>9999</RecordsPerPage>
