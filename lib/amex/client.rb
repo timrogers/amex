@@ -2,22 +2,42 @@ require 'erb'
 require 'httparty'
 require 'nokogiri'
 require 'date'
+require 'uuid'
 
 module Amex
   class Client
+    attr_accessor :locale, :urls
+
     include HTTParty
-    base_uri 'https://global.americanexpress.com/'
 
     # Generates an Amex::Client object from a username and password
     #
     # @param [String] username Your American Express online services username
     # @param [String] password Your American Express online services password
+    # @param [String] locale, either 'en_GB' or 'en_US'
     # @return [Amex::Client] an object representing an American Express online
     #  account
     #
-    def initialize(username, password)
+    def initialize(username, password, locale)
       @username = username
       @password = password
+      @locale = locale
+
+      all_urls = {
+        'en_GB' => {
+          :base_uri => 'https://global.americanexpress.com/',
+          :accounts => '/myca/intl/moblclient/emea/ws.do?Face='+@locale,
+        },
+        'en_US' => {
+          :base_uri => 'https://online.americanexpress.com/',
+          :accounts => '/myca/moblclient/us/v2/ws.do',
+        }
+      }
+
+      @urls = all_urls[@locale]
+      self.class.base_uri @urls[:base_uri]
+
+      @uuid_generator = UUID.new
     end
 
     # Fetches the cards on an American Express online services account
@@ -27,7 +47,7 @@ module Amex
     def accounts
       options = { :body => { "PayLoadText" => request_xml }}
       response = self.class.post(
-        '/myca/intl/moblclient/emea/ws.do?Face=en_GB', options
+        @urls[:accounts], options
       )
 
       xml = Nokogiri::XML(response.body)
@@ -51,8 +71,8 @@ module Amex
 
           # Now let's go through the AccountSummaryData to find all the
           # various bits of balance information
-          item.css('AccountSummaryData SummaryElement').each do |attribute|
-            account_details[attribute.attr('name')] = attribute.attr('value') ? attribute.attr('value').to_f : attribute.attr('formattedValue')
+          item.css('AccountSummaryData param').each do |attribute|
+            account_details[attribute.attr('name')] = attribute.text
           end
 
           # We have all the attributes ready to go, so let's make an
@@ -60,31 +80,16 @@ module Amex
           account = Amex::CardAccount.new(account_details)
 
           # Finally, let's rip out all the loyalty balances...
-          item.css('LoyaltyProgramData LoyaltyElement').each do |element|
+          item.css('LoyaltyData RewardsData param').each do |element|
             account.loyalty_programmes << Amex::LoyaltyProgramme.new(
               element.attr('label'), element.attr('formattedValue').gsub(",", "").to_i
             )
           end
-
-          # Now we can fetch the transactions...
-          options = { :body => {
-            "PayLoadText" => statement_request_xml(account.card_index)
-          }}
-          response = self.class.post(
-            '/myca/intl/moblclient/emea/ws.do?Face=en_GB', options
-          )
-          xml = Nokogiri::XML(response.body)
-          xml = xml.css("XMLResponse")
-
-          xml.css('Transaction').each do |transaction|
-            account.transactions << Amex::Transaction.new(transaction)
-          end
-
           accounts << account
 
         end
-
         accounts
+
       end
 
     end
@@ -96,17 +101,21 @@ module Amex
     # @param [Integer] billing_period The billing period to look at, with "0"
     #  being transactions since your last statement, "1" being your last
     #  statement, "2" the statement before that and so on....
+    # @param [enum] transaction_type either :pending or :recent (pending or recent transactions)
+    #
     #
     # @return [String] XML to be sent in the request
     #
-    def statement_request_xml(card_index, billing_period=0)
+    def transactions_request_xml(card_index, billing_period=0, transaction_type=:recent)
+      xml_filename = (transaction_type == :pending) ? '/data/pending_transactions_request.xml' : '/data/statement_request.xml'
       xml = File.read(
-        File.expand_path(File.dirname(__FILE__) + '/data/statement_request.xml')
+        File.expand_path(File.dirname(__FILE__) + xml_filename)
       )
-
+      locale = @locale
       security_token = @security_token
       ERB.new(xml).result(binding)
     end
+
 
 
     private
@@ -123,21 +132,23 @@ module Amex
       username = @username
       password = @password
       timestamp = Time.now.to_i
+      locale = @locale
 
       ERB.new(xml).result(binding)
     end
 
-    # Generates a fake HardwareId to be sent in requests, in an attempt to
+    # Generates a HardwareId to be sent in requests, in an attempt to
     # hide what requests to the API are coming from this gem
     #
-    # @return [String] a 40 character alphanumeric lower-case string, which
-    #  is passed in with the original API request
+    # @return [String] a uuid
     #
     def hardware_id
-      chars = 'abcdefghjkmnpqrstuvwxyz1234567890'
-      id = ''
-      40.times { id << chars[rand(chars.size)] }
-      id
+      @uuid_generator.generate
+    end
+
+
+    def advertisement_id
+      @uuid_generator.generate
     end
 
   end

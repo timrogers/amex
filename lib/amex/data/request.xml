@@ -1,10 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <XMLRequest>
-<ClientType>iPhone</ClientType>
-<ClientVersion>1.8</ClientVersion>
-<ServiceVersion>1.0</ServiceVersion>
-<Locale>en_GB</Locale>
-<ServiceName>AccountSummaryService</ServiceName>
-<DeviceInfo><HardwareId><%= hardware_id %></HardwareId><OSBuild>iPhone OS 6.0.1</OSBuild><DeviceModel>iPhone</DeviceModel><Timestamp><%= timestamp %></Timestamp><TimeZoneOffset>0</TimeZoneOffset></DeviceInfo>
-<LoginCredentials><UserID><%= username %></UserID><Password><%= password %></Password><RememberMeUIFlagSelected>false</RememberMeUIFlagSelected><ProfileDataContent></ProfileDataContent></LoginCredentials>
+	<ClientType>iPhone</ClientType>
+	<ClientVersion>4.1</ClientVersion>
+	<ServiceVersion>2.1</ServiceVersion>
+	<Locale><%= locale %></Locale>
+	<ServiceName>AccountSummaryService</ServiceName>
+	<Operation>AccountSummary</Operation>
+	<SummaryRequestData>
+		<fragmentName>AccountSummary</fragmentName>
+		<fragmentName>DCL</fragmentName>
+		<fragmentName>PNEnrollStatus</fragmentName>
+		<list>All</list>
+		<isAccountSummary>TRUE</isAccountSummary>
+	</SummaryRequestData>
+	<AllLoyaltyPrograms>true</AllLoyaltyPrograms>
+	<CardArtRequestData>
+		<CardArtRequest>
+			<tag>big-image</tag>
+			<resolution>high</resolution>
+			<min-width>460</min-width>
+		</CardArtRequest>
+	</CardArtRequestData>
+	<DeviceInfo>
+		<HardwareId><%= hardware_id %></HardwareId>
+		<AdvertisementID><%= advertisement_id %></AdvertisementID>
+		<OSBuild>iPhone OS 6.1.3</OSBuild>
+		<DeviceModel>iPhone</DeviceModel>
+		<AppName>com.americanexpress.amexservice</AppName>
+		<Timestamp><%= timestamp %></Timestamp>
+		<TimeZoneOffset>0</TimeZoneOffset>
+	</DeviceInfo>
+	<LoginCredentials>
+		<UserID><%= username %></UserID>
+		<Password><%= password %></Password>
+		<RememberMeUIFlagSelected>true</RememberMeUIFlagSelected>
+		<ProfileDataContent>muid#pix******|rmf#1|kid#1|ed#5A30871677D706575FC3DDC99831D738E59B2191B4A4B685C88015BC8DF44409BFCD55710170DAFF3E24B13B336E2CAE3C93C8B51A9D5C71|</ProfileDataContent>
+	</LoginCredentials>
 </XMLRequest>

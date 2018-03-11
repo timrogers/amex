@@ -6,7 +6,7 @@ require 'amex'
 require "#{File.dirname(__FILE__)}/settings.rb"
 
 # Instantiate an Amex::Client object
-client = Amex::Client.new(@username, @password)
+client = Amex::Client.new(@username, @password, "en_US")
 
 # Execute the #accounts method on the client, which will return an array
 # of Amex::CardAccount objects
@@ -17,8 +17,12 @@ account = accounts.first
 puts account.inspect
 
 # We can find out the transactions since the last statement
-recent_transactions = account.transactions
+recent_transactions = account.transactions(0, :recent)
 puts "There have been #{recent_transactions.length} transactions since your " +
+"last statement."
+
+pending_transactions = account.transactions(0, :pending)
+puts "There are #{pending_transactions.length} pending transactions since your " +
 "last statement."
 
 # and then look at individual statements to see their transactions...
